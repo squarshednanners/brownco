@@ -1,0 +1,112 @@
+# Checks every change; deploys to GitHub Pages from main only.
+# Constitution v1.1.0 two-tier rule:
+#   - Content-only edits (src/config/business.ts, public/images/**) may be pushed straight to main.
+#   - Any other change must arrive through a merged pull request (enforced by the tier guard).
+name: Check and deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: build-${{ github.ref }}
+      cancel-in-progress: true
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Change-tier guard
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BEFORE: ${{ github.event.before }}
+          SHA: ${{ github.sha }}
+          REPO: ${{ github.repository }}
+        run: |
+          if [ "$BEFORE" = "0000000000000000000000000000000000000000" ]; then
+            echo "::notice::Branch creation push; tier guard skipped."
+            exit 0
+          fi
+          if ! changed=$(git diff --name-only "$BEFORE" "$SHA"); then
+            echo "::error::Could not list changed files (force-push?). Merge changes through a pull request."
+            exit 1
+          fi
+          echo "Changed files:"; echo "$changed"
+          outside=$(echo "$changed" | grep -vE '^(src/config/business\.ts|public/images/.*)$' || true)
+          if [ -z "$outside" ]; then
+            echo "Content-only change: automated checks gate this deploy."
+            exit 0
+          fi
+          merged=$(gh api "repos/$REPO/commits/$SHA/pulls" --jq '[.[] | select(.merged_at != null)] | length')
+          if [ "$merged" -gt 0 ]; then
+            echo "Commit comes from a merged pull request."
+            exit 0
+          fi
+          echo "::error::Layout/feature changes must be merged through a pull request with the manual gates recorded (constitution Quality Gates). Files: $outside"
+          exit 1
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Configure Pages
+        id: pages
+        if: github.event_name != 'pull_request'
+        uses: actions/configure-pages@v5
+
+      - name: Install
+        run: npm ci
+
+      - name: Build check
+        env:
+          SITE_URL: ${{ steps.pages.outputs.origin || '' }}
+          BASE_PATH: ${{ steps.pages.outputs.base_path && format('{0}/', steps.pages.outputs.base_path) || '/' }}
+        run: npm run check
+
+      - name: HTML validation
+        run: npm run validate
+
+      - name: Banned words
+        run: |
+          npm run grep:banned
+          if grep -rniwEI 'retire|retirement|age|succession' dist/; then
+            echo "Banned word found"
+            exit 1
+          fi
+
+      - name: Upload site
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    concurrency:
+      group: pages-deploy
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
