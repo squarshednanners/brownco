@@ -15,7 +15,7 @@ export const business = {
   foundedYear: 1968,
   foundedConfirmed: true, // TODO: confirm the exact founding year, then change to true
   licensedInsured: false, // TODO: change to true to show "Licensed & insured" in the footer
-  websiteUrl: 'https://www.example.com', // TODO: your real web address (used for search listings, sitemap, robots.txt)
+  websiteUrl: 'https://browncoservices.com', // TODO: your real web address (used for search listings, sitemap, robots.txt)
 
   // ---- Phone & address ----
   contact: {
