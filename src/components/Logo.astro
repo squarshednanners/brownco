@@ -1,0 +1,29 @@
+---
+// Owner-supplied logo PNG served as WebP with the PNG as fallback (sizes from scripts/prebuild.mjs).
+import images from '../generated/images.json';
+import { asset } from '../config/derived';
+
+interface Props {
+  file: 'brown-co-logo.png' | 'brown-co-wordmark.png' | 'brown-co-compact.png' | 'brown-co-icon.png';
+  alt: string;
+  class?: string;
+  lazy?: boolean;
+}
+
+const { file, alt, class: className, lazy = false } = Astro.props;
+const info = (images as Record<string, { width: number; height: number; webp: { src: string; w: number }[] }>)[`logo/${file}`];
+if (!info) throw new Error(`Logo "public/logo/${file}" was not processed by scripts/prebuild.mjs.`);
+---
+
+<picture>
+  <source type="image/webp" srcset={asset(info.webp[0].src)} />
+  <img
+    src={asset(`logo/${file}`)}
+    width={info.width}
+    height={info.height}
+    alt={alt}
+    decoding="async"
+    loading={lazy ? 'lazy' : 'eager'}
+    class={className}
+  />
+</picture>

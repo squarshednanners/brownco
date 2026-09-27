@@ -1,0 +1,47 @@
+---
+// schema.org GeneralContractor (a LocalBusiness subtype), built entirely from business.ts.
+import { business } from '../config/business';
+import { fill, geoRadiusMeters, phoneE164, siteRoot } from '../config/derived';
+
+const root = siteRoot(Astro.site);
+const url = (path = '') => new URL(path, root).href;
+const { contact, serviceArea } = business;
+const geo = { '@type': 'GeoCoordinates', latitude: serviceArea.centerGeo.lat, longitude: serviceArea.centerGeo.lng };
+
+const data = {
+  '@context': 'https://schema.org',
+  '@type': 'GeneralContractor',
+  '@id': url('#business'),
+  name: business.name,
+  alternateName: business.shortName,
+  url: url(),
+  telephone: phoneE164,
+  foundingDate: String(business.foundedYear),
+  logo: url('logo/brown-co-logo.png'),
+  image: url('og-image.png'),
+  description: fill(business.seo.description),
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: contact.street,
+    addressLocality: contact.city,
+    addressRegion: contact.state,
+    postalCode: contact.zip,
+    addressCountry: 'US',
+  },
+  geo,
+  areaServed: [
+    { '@type': 'GeoCircle', geoMidpoint: geo, geoRadius: String(geoRadiusMeters) },
+    ...serviceArea.counties.map((c) => ({ '@type': 'AdministrativeArea', name: `${c} County, ${contact.stateName}` })),
+  ],
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'Services',
+    itemListElement: [
+      ...business.terraces.offerings.map((o) => o.title),
+      ...business.services.map((s) => s.name),
+    ].map((name) => ({ '@type': 'Offer', itemOffered: { '@type': 'Service', name } })),
+  },
+};
+---
+
+<script type="application/ld+json" is:inline set:html={JSON.stringify(data)} />

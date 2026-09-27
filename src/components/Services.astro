@@ -1,0 +1,21 @@
+---
+import { business } from '../config/business';
+import Icon from './Icon.astro';
+---
+
+<section id="services" class="bg-soil/5 py-14 md:py-16">
+  <div class="container-x">
+    <h2 class="text-3xl text-soil sm:text-4xl">We also do</h2>
+    <ul class="mt-8 grid grid-cols-1 gap-4 min-[480px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+      {
+        business.services.map((s) => (
+          <li class="rounded-lg bg-cream p-5 ring-1 ring-soil/10">
+            <Icon name={s.icon} class="size-9 text-field" />
+            <h3 class="mt-3 text-xl text-soil">{s.name}</h3>
+            <p class="mt-1 text-base">{s.description}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

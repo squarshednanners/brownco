@@ -1,0 +1,33 @@
+---
+import { business } from '../config/business';
+---
+
+<section id="how-we-work" class="py-14 md:py-20">
+  <div class="container-x">
+    <h2 class="text-3xl text-soil sm:text-4xl">How we work</h2>
+    <ol class="mt-8 grid gap-8 md:grid-cols-4 md:gap-6">
+      {
+        business.processSteps.map((s, i) => (
+          <li class="relative flex gap-4 md:flex-col md:gap-2">
+            <span
+              class="font-display text-5xl leading-none font-extrabold text-rust md:text-6xl"
+              aria-hidden="true"
+            >
+              {i + 1}
+            </span>
+            <div>
+              <h3 class="text-xl text-soil md:text-2xl">
+                <span class="visually-hidden">Step {i + 1}: </span>
+                {s.title}
+              </h3>
+              {s.text && <p class="mt-1">{s.text}</p>}
+            </div>
+            {i < business.processSteps.length - 1 && (
+              <span class="absolute top-7 left-14 hidden h-1 w-[calc(100%-4rem)] rounded bg-rust/40 md:block" aria-hidden="true" />
+            )}
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>

@@ -1,0 +1,129 @@
+@import "tailwindcss";
+@import "@fontsource/barlow-condensed/latin-800.css";
+@import "@fontsource/barlow/latin-400.css";
+@import "@fontsource/barlow/latin-600.css";
+
+/* Brand palette and fonts (from the owner's brief). Gold is for call buttons ONLY. */
+@theme {
+  --color-soil: #3B2A1A;
+  --color-field: #3F6B3A;
+  --color-gold: #D9A441;
+  --color-cream: #F5F0E6;
+  --color-ink: #1F1F1F;
+  --color-rust: #B5541C;
+  --font-display: "Barlow Condensed", "Barlow Condensed Fallback", "Arial Narrow", "Roboto Condensed", Arial, sans-serif;
+  --font-body: "Barlow", "Barlow Fallback", system-ui, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+/* Metric-adjusted local fallbacks keep layout shift near zero while web fonts load. */
+@font-face {
+  font-family: "Barlow Condensed Fallback";
+  src: local("Arial Narrow"), local("Arial");
+  size-adjust: 88%;
+  ascent-override: 110%;
+  descent-override: 26%;
+}
+@font-face {
+  font-family: "Barlow Fallback";
+  src: local("Arial");
+  size-adjust: 96%;
+  ascent-override: 104%;
+  descent-override: 21%;
+}
+
+@layer base {
+  :root {
+    --header-h: 4rem;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  body {
+    background-color: var(--color-cream);
+    color: var(--color-ink);
+    font-family: var(--font-body);
+    font-size: 1.0625rem;
+    line-height: 1.6;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+    text-wrap: balance;
+  }
+
+  section[id] {
+    scroll-margin-top: calc(var(--header-h) + 0.5rem);
+  }
+
+  /* Focus: soil on light backgrounds, cream on dark bands. Never the CTA accent color. */
+  :focus-visible {
+    outline: 3px solid var(--color-soil);
+    outline-offset: 3px;
+  }
+  .on-dark :focus-visible {
+    outline-color: var(--color-cream);
+  }
+}
+
+@layer components {
+  .visually-hidden {
+    position: absolute !important;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .skip-link {
+    position: absolute;
+    left: 0.75rem;
+    top: -4rem;
+    z-index: 100;
+    padding: 0.75rem 1rem;
+    background: var(--color-soil);
+    color: var(--color-cream);
+    font-weight: 600;
+  }
+  .skip-link:focus {
+    top: 0.75rem;
+  }
+
+  /* Constitution III: every link/button in nav and footer gets a 44x44 px tap area. */
+  .tap {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    min-width: 2.75rem;
+    padding-inline: 0.5rem;
+  }
+
+  .container-x {
+    width: 100%;
+    max-width: 72rem;
+    margin-inline: auto;
+    padding-inline: 1rem;
+  }
+  @media (min-width: 768px) {
+    .container-x {
+      padding-inline: 1.5rem;
+    }
+  }
+}

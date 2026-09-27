@@ -1,0 +1,42 @@
+{
+  "name": "brown-co-services",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Marketing website for Brown Co Services, terrace contractor in Henderson, Iowa.",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "predev": "tsx scripts/prebuild.mjs",
+    "dev": "astro dev",
+    "prebuild": "tsx scripts/prebuild.mjs",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "tsx scripts/prebuild.mjs && astro check && astro build && tsx scripts/check-build.mjs",
+    "validate": "html-validate \"dist/**/*.html\"",
+    "grep:banned": "node scripts/grep-banned.mjs",
+    "test": "npm run check && npm run validate && npm run grep:banned",
+    "todo": "tsx scripts/todo.mjs",
+    "predeploy-guard": "tsx scripts/require-site-url.mjs",
+    "deploy:netlify": "npm run predeploy-guard && npm run build && npx netlify-cli deploy --prod --dir=dist",
+    "deploy:cloudflare": "npm run predeploy-guard && npm run build && npx wrangler pages deploy dist --project-name=brown-co-services"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@astrojs/sitemap": "^3.7.4",
+    "@fontsource/barlow": "^5.3.0",
+    "@fontsource/barlow-condensed": "^5.3.0",
+    "@tailwindcss/vite": "^4.3.3",
+    "astro": "^7.3.5",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^6.0.3"
+  },
+  "devDependencies": {
+    "html-validate": "^11.16.0",
+    "node-html-parser": "^9.0.4",
+    "png-to-ico": "^3.0.2",
+    "sharp": "^0.35.4",
+    "tsx": "^4.23.15"
+  }
+}

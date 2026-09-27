@@ -1,0 +1,21 @@
+---
+import { business } from '../config/business';
+import { fill } from '../config/derived';
+import Icon from './Icon.astro';
+import TodoNote from './TodoNote.astro';
+---
+
+<section id="trust" class="on-dark bg-field text-white">
+  <h2 class="visually-hidden">Why farmers call us</h2>
+  <ul class="container-x grid grid-cols-1 gap-x-6 gap-y-3 py-6 min-[480px]:grid-cols-2 lg:grid-cols-5 lg:py-7">
+    {
+      business.trustFacts.map((f) => (
+        <li class="flex items-start gap-2 text-base font-semibold leading-snug">
+          <Icon name="check" class="mt-0.5 size-5 shrink-0" />
+          <span>{fill(f.text)}</span>
+          <TodoNote confirmed={f.confirmed} text={fill(f.text)} />
+        </li>
+      ))
+    }
+  </ul>
+</section>

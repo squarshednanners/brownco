@@ -1,0 +1,41 @@
+<!--
+  Original placeholder illustration: freshly built terraces curving across a hillside at golden hour.
+  Rendered once to public/images/placeholder-hero.jpg (1600x1000) with:
+    node -e "require('sharp')('scripts/placeholders/placeholder-hero.svg').resize(1600,1000).jpeg({quality:82,mozjpeg:true}).toFile('public/images/placeholder-hero.jpg')"
+  TODO: replace the JPEG with the owner's real photo (see README).
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" width="1600" height="1000">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#E9B96A"/>
+      <stop offset="0.55" stop-color="#F3D9A4"/>
+      <stop offset="1" stop-color="#F5E7C8"/>
+    </linearGradient>
+    <linearGradient id="far" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#7C8F5A"/>
+      <stop offset="1" stop-color="#5E7447"/>
+    </linearGradient>
+    <linearGradient id="hill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4F7A43"/>
+      <stop offset="1" stop-color="#355C31"/>
+    </linearGradient>
+    <clipPath id="h"><path d="M0 560C260 400 560 330 860 350S1360 450 1600 520V1000H0Z"/></clipPath>
+  </defs>
+  <rect width="1600" height="1000" fill="url(#sky)"/>
+  <circle cx="1260" cy="250" r="90" fill="#FBEBC4" opacity="0.9"/>
+  <path d="M0 470C300 400 600 420 900 390S1400 380 1600 420V620H0Z" fill="url(#far)" opacity="0.75"/>
+  <path d="M0 560C260 400 560 330 860 350S1360 450 1600 520V1000H0Z" fill="url(#hill)"/>
+  <g clip-path="url(#h)" fill="none" stroke-linecap="round">
+    <g stroke="#8A6A45" stroke-width="16">
+      <path d="M-40 660C240 500 560 430 860 450S1360 550 1640 620"/>
+      <path d="M-40 770C240 610 560 540 860 560S1360 660 1640 730"/>
+      <path d="M-40 880C240 720 560 650 860 670S1360 770 1640 840"/>
+      <path d="M-40 990C240 830 560 760 860 780S1360 880 1640 950"/>
+    </g>
+    <g stroke="#6C8F4E" stroke-width="10" opacity="0.8">
+      <path d="M-40 676C240 516 560 446 860 466S1360 566 1640 636"/>
+      <path d="M-40 786C240 626 560 556 860 576S1360 676 1640 746"/>
+      <path d="M-40 896C240 736 560 666 860 686S1360 786 1640 856"/>
+    </g>
+  </g>
+</svg>

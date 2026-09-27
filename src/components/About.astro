@@ -1,0 +1,30 @@
+---
+import { business } from '../config/business';
+import { fill } from '../config/derived';
+import Photo from './Photo.astro';
+import TodoNote from './TodoNote.astro';
+
+const f = business.family;
+---
+
+<section id="about" class="bg-soil/5 py-16 md:py-24">
+  <div class="container-x">
+    <!-- Wide illustrated banner across the top of the section. -->
+    <div class="overflow-hidden rounded-xl ring-1 ring-soil/15">
+      <Photo photo={business.photos.about} sizes="(min-width: 1152px) 1104px, 100vw" class="h-auto w-full" />
+    </div>
+    <div class="mt-10 grid gap-6 md:grid-cols-[2fr_3fr] md:gap-14">
+      <div>
+        <p class="font-display text-lg font-extrabold uppercase tracking-widest text-field">Family-owned</p>
+        <h2 class="mt-1 text-4xl text-soil sm:text-5xl">Two generations on this ground</h2>
+      </div>
+      <div class="space-y-4 text-lg">
+        <TodoNote confirmed={f.ownerName !== 'Owner Name'} text="owner name" />
+        <TodoNote confirmed={f.founderName !== 'Founder Name'} text="founder name, relation, and owner pronoun" />
+        {f.aboutParagraphs.map((p) => <p>{fill(p)}</p>)}
+        {f.weFarmHere ? <p>{fill(f.weFarmHereText)}</p> : <TodoNote confirmed={false} text="we farm in this area too" />}
+        {f.showCrewFamilyMember && f.crewFamilyMemberName && <p>{fill(f.crewFamilyMemberText)}</p>}
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,28 @@
+---
+import { business } from '../config/business';
+import { fill } from '../config/derived';
+import CallButton from './CallButton.astro';
+import Photo from './Photo.astro';
+---
+
+<section id="hero" class="on-dark relative isolate overflow-hidden bg-soil text-cream">
+  <div class="absolute inset-0 -z-10">
+    <Photo photo={business.photos.hero} eager sizes="100vw" class="h-full w-full object-cover" />
+    <!-- Overlay keeps text contrast ≥ 4.5:1 over any photo (≥ 80% soil behind the text). -->
+    <div class="absolute inset-0 bg-soil/85 md:bg-transparent md:bg-linear-to-r md:from-soil/95 md:from-35% md:via-soil/80 md:via-55% md:to-soil/10"></div>
+  </div>
+
+  <div class="container-x py-8 sm:py-14 md:py-24 lg:py-32">
+    <div class="max-w-2xl">
+      <h1 class="text-[2.35rem] leading-[0.98] min-[400px]:text-5xl sm:text-6xl lg:text-7xl">
+        {business.hero.headline}
+      </h1>
+      <p class="subhead mt-4 max-w-xl text-lg font-semibold text-cream sm:text-xl md:text-2xl">
+        {fill(business.hero.subhead)}
+      </p>
+      <div class="mt-6 sm:mt-8">
+        <CallButton size="lg" />
+      </div>
+    </div>
+  </div>
+</section>

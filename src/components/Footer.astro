@@ -1,0 +1,49 @@
+---
+import { business } from '../config/business';
+import { copyrightYear, navLinks, phoneDisplayNoWrap, phoneHref } from '../config/derived';
+import Icon from './Icon.astro';
+import Logo from './Logo.astro';
+import TodoNote from './TodoNote.astro';
+
+const c = business.contact;
+---
+
+<footer id="contact" class="on-dark bg-soil text-cream">
+  <div class="container-x grid gap-10 py-12 md:grid-cols-2">
+    <div>
+      <span class="inline-block rounded-md bg-cream px-3 py-2">
+        <Logo file="brown-co-wordmark.png" alt={business.name} lazy class="h-auto w-44" />
+      </span>
+      <p class="mt-4">
+        <a href={phoneHref} class="tap -ml-2 gap-2 text-xl font-semibold text-cream underline-offset-4 hover:underline">
+          <Icon name="phone" class="size-5" />
+          {phoneDisplayNoWrap}
+        </a>
+      </p>
+      <address class="mt-2 not-italic">
+        {c.street}<br />
+        {c.city}, {c.state} {c.zip}
+      </address>
+      <TodoNote confirmed={c.street !== '123 Main St'} text="street address and ZIP" />
+      {business.licensedInsured ? <p class="mt-4 font-semibold">Licensed &amp; insured</p> : <TodoNote confirmed={false} text="licensed & insured" />}
+    </div>
+
+    <nav id="site-nav-footer" aria-label="Footer">
+      <h2 class="text-xl text-cream">On this page</h2>
+      <ul class="mt-2">
+        {
+          navLinks.map((l) => (
+            <li>
+              <a href={l.href} class="tap -ml-2 text-cream underline-offset-4 hover:underline">
+                {l.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+  <div class="border-t border-cream/20">
+    <p class="container-x py-5 text-sm">© {copyrightYear} {business.name}. Family-owned and operated in {c.city}, {c.stateName}.</p>
+  </div>
+</footer>

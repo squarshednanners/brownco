@@ -1,0 +1,22 @@
+---
+// Open Graph + Twitter card tags. URLs use the same resolved site root as the canonical and JSON-LD.
+import { business } from '../config/business';
+import { fill, siteRoot } from '../config/derived';
+
+const root = siteRoot(Astro.site);
+const title = fill(business.seo.title);
+const description = fill(business.seo.description);
+const image = new URL('og-image.png', root).href;
+---
+
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content={business.name} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={root.href} />
+<meta property="og:image" content={image} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content={`${business.name} logo`} />
+<meta property="og:locale" content="en_US" />
+<meta name="twitter:card" content="summary_large_image" />

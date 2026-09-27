@@ -1,0 +1,43 @@
+---
+// <picture> with WebP sources (made by scripts/prebuild.mjs) and the original JPEG as fallback.
+import images from '../generated/images.json';
+import type { PhotoSlot } from '../config/derived';
+import { asset } from '../config/derived';
+
+interface ImageInfo {
+  width: number;
+  height: number;
+  webp: { src: string; w: number }[];
+}
+
+interface Props {
+  photo: PhotoSlot;
+  sizes: string;
+  /** Above-the-fold image: load immediately with high priority (constitution Principle II). */
+  eager?: boolean;
+  class?: string;
+}
+
+const { photo, sizes, eager = false, class: className } = Astro.props;
+const info = (images as Record<string, ImageInfo>)[photo.file];
+if (!info) {
+  throw new Error(`business.ts → photos: "${photo.file}" was not processed. Is it in public/images/?`);
+}
+const srcset = info.webp.map((v) => `${asset(v.src)} ${v.w}w`).join(', ');
+const todo = `<!-- TODO: replace placeholder photo "${photo.file}" with the owner's real photo (see README) -->`;
+---
+
+{photo.isPlaceholder && <Fragment set:html={todo} />}
+<picture>
+  <source type="image/webp" srcset={srcset} sizes={sizes} />
+  <img
+    src={asset(`images/${photo.file}`)}
+    width={info.width}
+    height={info.height}
+    alt={photo.alt}
+    decoding="async"
+    loading={eager ? 'eager' : 'lazy'}
+    fetchpriority={eager ? 'high' : undefined}
+    class={className}
+  />
+</picture>

@@ -1,0 +1,10 @@
+---
+// Leaves an HTML comment for the owner beside a claim that is not confirmed yet.
+interface Props {
+  confirmed: boolean;
+  text: string;
+}
+const { confirmed, text } = Astro.props;
+---
+
+{!confirmed && <Fragment set:html={`<!-- TODO: confirm with owner: ${text} -->`} />}

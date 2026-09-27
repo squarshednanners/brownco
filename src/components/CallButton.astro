@@ -1,0 +1,34 @@
+---
+// The ONLY component allowed to use the gold accent (spec FR-004).
+import { business } from '../config/business';
+import { fill, phoneDisplayNoWrap, phoneHref } from '../config/derived';
+import Icon from './Icon.astro';
+
+interface Props {
+  size?: 'sm' | 'lg';
+  /** Adds a soil border so the button edge is visible on cream backgrounds (WCAG 1.4.11). */
+  onLight?: boolean;
+  /** Below 400px, show only the number (the word "Call" stays for screen readers). */
+  compact?: boolean;
+  class?: string;
+}
+
+const { size = 'lg', onLight = false, compact = false, class: extra } = Astro.props;
+const [before = '', after = ''] = business.hero.callLabel.split('{phone}');
+---
+
+<a
+  href={phoneHref}
+  class:list={[
+    'call-btn inline-flex items-center justify-center gap-2 rounded-md bg-gold font-display font-extrabold uppercase tracking-wide text-ink no-underline',
+    'min-h-11 min-w-11 transition-colors hover:bg-rust hover:text-white focus-visible:bg-rust focus-visible:text-white',
+    size === 'lg' ? 'px-6 py-3 text-xl sm:text-2xl' : 'px-3 py-2 text-base sm:text-lg',
+    onLight && 'border-2 border-soil',
+    extra,
+  ]}
+>
+  <Icon name="phone" class={size === 'lg' ? 'size-6' : 'size-5'} />
+  <span class="whitespace-nowrap">
+    {before && <span class:list={[compact && 'max-[399px]:sr-only']}>{fill(before)}</span>}{phoneDisplayNoWrap}{after && fill(after)}
+  </span>
+</a>

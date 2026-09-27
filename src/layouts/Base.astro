@@ -1,0 +1,35 @@
+---
+import '../styles/global.css';
+import displayFont from '@fontsource/barlow-condensed/files/barlow-condensed-latin-800-normal.woff2?url';
+import { business } from '../config/business';
+import { asset, fill, siteRoot } from '../config/derived';
+
+const canonical = siteRoot(Astro.site).href;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fill(business.seo.title)}</title>
+    <meta name="description" content={fill(business.seo.description)} />
+    <link rel="canonical" href={canonical} />
+    <meta name="theme-color" content="#3B2A1A" />
+    <link rel="preload" href={displayFont} as="font" type="font/woff2" crossorigin />
+    <link rel="icon" href={asset('favicon.ico')} sizes="32x32" />
+    <link rel="icon" href={asset('icon-192.png')} type="image/png" sizes="192x192" />
+    <link rel="apple-touch-icon" href={asset('apple-touch-icon.png')} />
+    <link rel="manifest" href={asset('site.webmanifest')} />
+    <slot name="head" />
+    <Fragment set:html="<!-- Analytics placeholder: add a privacy-friendly analytics snippet here if ever needed. Not enabled. -->" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <slot />
+    <!-- Nav toggle (the only client JS). Without it, "Menu" is a link to the footer navigation. -->
+    <script is:inline>
+      (()=>{const h=document.querySelector('[data-header]'),a=h&&h.querySelector('a.menu-toggle');if(!a)return;const b=document.createElement('button');b.type='button';b.className=a.className;b.innerHTML=a.innerHTML;b.setAttribute('aria-expanded','false');b.setAttribute('aria-controls','site-nav');a.replaceWith(b);const s=o=>{o?h.setAttribute('data-open',''):h.removeAttribute('data-open');b.setAttribute('aria-expanded',String(o))};b.addEventListener('click',()=>s(!h.hasAttribute('data-open')));h.querySelectorAll('#site-nav a').forEach(l=>l.addEventListener('click',()=>s(!1)));document.addEventListener('keydown',e=>{if(e.key==='Escape'&&h.hasAttribute('data-open')){s(!1);b.focus()}})})();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,52 @@
+---
+import { business } from '../config/business';
+import { navLinks } from '../config/derived';
+import CallButton from './CallButton.astro';
+import Icon from './Icon.astro';
+import Logo from './Logo.astro';
+---
+
+<header
+  id="top"
+  data-header
+  class="group on-dark sticky top-0 z-50 bg-soil text-cream shadow-md"
+>
+  <div class="container-x flex h-16 items-center gap-2">
+    <a href="#top" class="tap -ml-2 shrink-0 no-underline" aria-label={`${business.name}, back to top`}>
+      <span class="rounded-md bg-cream px-1.5 py-1 md:hidden">
+        <Logo file="brown-co-compact.png" alt="" class="h-8 w-auto min-[400px]:h-10" />
+      </span>
+      <span class="hidden rounded-md bg-cream px-2 py-0.5 md:inline-block">
+        <Logo file="brown-co-logo.png" alt="" class="h-12 w-auto" />
+      </span>
+    </a>
+
+    <nav
+      id="site-nav"
+      aria-label="Main"
+      class="absolute inset-x-0 top-16 hidden border-t border-cream/20 bg-soil shadow-lg group-data-[open]:block lg:static lg:ml-auto lg:block lg:border-0 lg:shadow-none"
+    >
+      <ul class="container-x flex flex-col py-2 lg:flex-row lg:items-center lg:gap-1 lg:p-0">
+        {
+          navLinks.map((l) => (
+            <li>
+              <a href={l.href} class="tap w-full font-semibold text-cream no-underline hover:underline lg:w-auto">
+                {l.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <a
+      href="#site-nav-footer"
+      class="menu-toggle tap ml-auto gap-1 rounded-md font-semibold text-cream no-underline lg:hidden"
+    >
+      <Icon name="menu" class="size-6" />
+      <span class="max-[399px]:sr-only">Menu</span>
+    </a>
+
+    <CallButton size="sm" compact class="shrink-0 lg:ml-2" />
+  </div>
+</header>
